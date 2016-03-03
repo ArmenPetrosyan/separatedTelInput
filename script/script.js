@@ -7,15 +7,32 @@ var telInputHandler = (function(){
         rawValue = rawValue.trim();
         var len = rawValue.length;
 
-        separatedValue = _getBuckets(len);
+        switch (len) {
+            case 6 : separatedValue = _getBuckets(len, 'XX XX XX');
+                break;
+            case 7 : separatedValue = _getBuckets(len, 'XXX XX XX');
+                break;
+            case 8 : separatedValue = _getBuckets(len, 'XXX XXX XX');
+                break
+            case 9 : separatedValue = _getBuckets(len, 'XXX XXX XXX');
+                break;
+            case 10 : separatedValue = _getBuckets(len, 'XXX XXX XX XX');
+                break;
+            default : separatedValue = rawValue;
+        }
     }
 
-    function _getBuckets(len){
-        var tmp = [];
+    function _getBuckets(len, mask){
+        var tmp = [],
+            maskLen = mask.length,
+            i = 0,
+            j = 0;
 
-        for(var i = 0; i < len; i += 1 ){
-            tmp.push(rawValue[i]);
-            if (i && i % 2 === 0) {
+        for(; i < maskLen; i += 1 ){
+            if (mask[i] != ' ') {
+                tmp.push(rawValue[j]);
+                j += 1;
+            }else{
                 tmp.push(' ');
             }
         }
@@ -31,7 +48,7 @@ var telInputHandler = (function(){
         $telInput.val(rawValue);
     }
 
-    $telInput.on('focusout', function(){
+    $telInput.on('focusout.telInput', function(){
         var newValue = $(this).val().trim();
         if (newValue != separatedValue) {
             rawValue = newValue;
@@ -41,7 +58,7 @@ var telInputHandler = (function(){
         _fillSeparated();
     });
 
-    $telInput.on('focusin', function(){
+    $telInput.on('focusin.telInput', function(){
         _fillRaw();
     });
 
