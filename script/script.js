@@ -8,21 +8,21 @@ var telInputHandler = (function(){
         var len = rawValue.length;
 
         switch (len) {
-            case 6 : separatedValue = _getBuckets(len, 'XX XX XX');
+            case 6 : separatedValue = _getBuckets('XX XX XX');
                 break;
-            case 7 : separatedValue = _getBuckets(len, 'XXX XX XX');
+            case 7 : separatedValue = _getBuckets('XXX XX XX');
                 break;
-            case 8 : separatedValue = _getBuckets(len, 'XXX XXX XX');
+            case 8 : separatedValue = _getBuckets('XXX XXX XX');
                 break
-            case 9 : separatedValue = _getBuckets(len, 'XXX XXX XXX');
+            case 9 : separatedValue = _getBuckets( 'XXX XXX XXX');
                 break;
-            case 10 : separatedValue = _getBuckets(len, 'XXX XXX XX XX');
+            case 10 : separatedValue = _getBuckets('XXX XXX XX XX');
                 break;
             default : separatedValue = rawValue;
         }
     }
 
-    function _getBuckets(len, mask){
+    function _getBuckets(mask){
         var tmp = [],
             maskLen = mask.length,
             i = 0,
@@ -50,9 +50,13 @@ var telInputHandler = (function(){
 
     $telInput.on('focusout.telInput', function(){
         var newValue = $(this).val().trim();
-        if (newValue != separatedValue) {
+        if (newValue != rawValue) {
             rawValue = newValue;
+            t1 = performance.now();
             _separateValue();
+            t2 = performance.now();
+
+            console.log((t2-t1).toFixed(4));
         }
 
         _fillSeparated();
